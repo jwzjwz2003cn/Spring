@@ -1,5 +1,8 @@
 package com.loyaltyone.helloworld.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,13 +24,15 @@ public class MessageController {
 	}
 	
 
-	@RequestMapping(value="/message", method=RequestMethod.POST)
-	@ResponseBody
-	public String displayText(HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(headers="Accept=application/json", value="/message", method=RequestMethod.POST, produces="application/json")
+	@ResponseBody 
+	public Map<String, Object> displayText(HttpServletRequest request){
 		String text = request.getParameter("text");
 		System.out.println(text);
 		textService.setText(text);
-		return textService.getText();
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("message", textService.getText());
+		return data;
 	}
 	
 	@Autowired
